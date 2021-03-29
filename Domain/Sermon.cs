@@ -9,5 +9,9 @@ namespace Domain
         public string SermonDescription {get; set;}
         public string SermonVideoLink {get; set;}
         public virtual ICollection<UserFavorite> UserFavorites {get; set;} 
+        public int SermonViews {get; set;}
+        public int SermonShares {get; set;}
+        public Guid SermonSeriesId {get; set;}
+        public virtual SermonSeries SermonSeries {get; set;}
     }
 }

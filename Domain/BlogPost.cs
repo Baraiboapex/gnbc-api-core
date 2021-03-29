@@ -15,5 +15,7 @@ namespace Domain
         public virtual ICollection<BlogPostCategory> BlogCategories {get; set;}
         public virtual ICollection<UserFavorite> UserFavorites {get; set;}
         public virtual User User {get; set;}
+        public int BlogPostViews {get; set;}
+        public int BlogPostShares {get; set;}
     }
 }

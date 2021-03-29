@@ -12,7 +12,9 @@ namespace Domain
         public string Email{get; set;}
          [Required]
         public string Password {get; set;}
-        public bool CanBlog {get; set;}
+        public bool IsAdmin {get; set;} = false;
+        public bool CanBlog {get; set;} = false;
+        public bool CanRecieveNotifications {get; set;} = false;
         public virtual ICollection<BlogPost> BlogPosts {get; set;}
         public virtual UserFavorite UserFavorite {get; set;}
     }

@@ -8,6 +8,11 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Persistence;
+using MediatR;
+using Application.Sermons; 
+using Application.BibleStudies;
+using Application.Users;
+using Application.BlogPosts;
 
 namespace API
 {
@@ -34,6 +39,18 @@ namespace API
             {
                 options.UseSqlServer(_configuration.GetConnectionString("DefaultConnection"));
             });
+
+            //Sermon Mediator Services
+            services.AddMediatR(typeof(ListSermons.GetSermonsHandler).Assembly);
+
+            //Bible Study Mediator Services
+            services.AddMediatR(typeof(ListBibleStudies.GetBibleStudiesHandler).Assembly);
+
+            //User Mediator Services
+            services.AddMediatR(typeof(ListUsers.GetUsers).Assembly);
+
+            //Blog Post Mediator Services
+            services.AddMediatR(typeof(GetBlogPosts.ListBlogPostsHandler).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

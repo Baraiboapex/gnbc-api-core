@@ -19,10 +19,19 @@ namespace Persistence
         public DbSet<User> Users {get; set;}
         public DbSet<UserFavorite> UserFavorites {get; set;}
 
+        public DbSet <SermonSeries> SermonSeries {get; set;}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //User entity relationships
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts).WithOne(b => b.User);
-            modelBuilder.Entity<User>().HasOne(u => u.UserFavorite).WithOne(uf => uf.User).HasForeignKey<UserFavorite>(uf => uf.UserId);
+            modelBuilder.Entity<User>().HasOne(u => u.UserFavorite).WithOne(uf => uf.User).HasForeignKey<UserFavorite>(u => u.UserId);
+
+            //Blog post entity relationships
+            modelBuilder.Entity<BlogPost>().HasMany(bp => bp.BlogCategories).WithMany(bc => bc.BlogPosts);
+            
+            //Sermon series entity relationships
+            modelBuilder.Entity<SermonSeries>().HasMany(ss => ss.Sermons).WithOne(s=>s.SermonSeries).HasForeignKey(s => s.SermonSeriesId);
         }
 
     }

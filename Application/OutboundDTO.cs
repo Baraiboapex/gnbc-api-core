@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace API.Controllers.DTO.Outbound
+namespace Application
 {
     public class OutboundDTO
     {

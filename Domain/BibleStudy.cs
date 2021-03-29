@@ -9,5 +9,7 @@ namespace Domain
         public string BibleStudyDescription {get; set;}
         public string BibleStudyVideoLink {get; set;}
         public virtual ICollection<UserFavorite> UserFavorites {get; set;}
+        public int BibleStudyViews {get; set;}
+        public int BibleStudyShares {get; set;}
     }
 }
