@@ -53,7 +53,7 @@ namespace Application.BlogPosts
                         {
                             var newError = new NewError();
 
-                            newError.AddValue(400, "Blog post does not exist.");
+                            newError.AddValue(404, "Blog post does not exist.");
 
                             throw newError;
                         }
@@ -62,7 +62,7 @@ namespace Application.BlogPosts
                     {
                         var newError = new NewError();
 
-                        newError.AddValue(400, "User favorite does not exist.");
+                        newError.AddValue(404, "User favorite does not exist.");
 
                         throw newError;
                     }
@@ -71,7 +71,7 @@ namespace Application.BlogPosts
                 {
                     var newError = new NewError();
 
-                    newError.AddValue(400, "User does not exist.");
+                    newError.AddValue(404, "User does not exist.");
 
                     throw newError;
                 }

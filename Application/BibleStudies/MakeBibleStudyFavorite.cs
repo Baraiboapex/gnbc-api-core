@@ -49,17 +49,29 @@ namespace Application.BibleStudies
                         }
                         else
                         {
-                            throw new Exception("Bible study does not exist");
+                            var newError = new NewError();
+
+                            newError.AddValue(404,"Bible study does not exist.");
+
+                            throw newError;
                         }
                     }
                     else
                     {
-                        throw new Exception("User favorite study does not exist");
+                        var newError = new NewError();
+
+                        newError.AddValue(404,"User favorite study does not exist.");
+
+                        throw newError;
                     }
                 }
                 else
                 {
-                    throw new Exception("User does not exist");
+                    var newError = new NewError();
+
+                    newError.AddValue(404,"User does not exist.");
+
+                    throw newError;
                 }
 
                 return Unit.Value;

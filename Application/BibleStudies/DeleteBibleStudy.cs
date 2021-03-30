@@ -34,7 +34,11 @@ namespace Application.BibleStudies
                 }
                 else
                 {
-                    throw new Exception("sermon Does Not Exist");
+                    var newError = new NewError();
+
+                    newError.AddValue(400,"sermon Does Not Exist");
+
+                    throw newError;
                 }
 
                 return Unit.Value;

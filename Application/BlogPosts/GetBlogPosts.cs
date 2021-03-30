@@ -80,25 +80,20 @@ namespace Application.BlogPosts
 
                 if(!blogPostDoesNotExist)
                 {
-                    Task<Hashtable> createBlogPostList = Task<Hashtable>.Factory.StartNew(() =>{
-                    
-                        OutboundDTO outboundItemData = new OutboundDTO();
+                    OutboundDTO outboundItemData = new OutboundDTO();
 
-                        outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostId", Value = blogPost.Id });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostTitle", Value = blogPost.BlogPostTitle });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostContent", Value = blogPost.BlogPostContent });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostImage", Value = blogPost.BlogPostImage });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostId", Value = blogPost.Id });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostTitle", Value = blogPost.BlogPostTitle });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostContent", Value = blogPost.BlogPostContent });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostImage", Value = blogPost.BlogPostImage });
 
-                        return outboundItemData.GetPayload();
-                    });
-
-                    return await createBlogPostList;
+                    return outboundItemData.GetPayload();
                 }
                 else
                 {
                     var newError = new NewError();
 
-                    newError.AddValue(400, "No blog posts were found!");
+                    newError.AddValue(404, "No blog posts were found.");
 
                     throw newError;
                 }

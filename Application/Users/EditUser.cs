@@ -40,7 +40,11 @@ namespace Application.Users
                 }
                 else
                 {
-                    throw new Exception("User does not exist");
+                    var newError = new NewError();
+
+                    newError.AddValue(404, "User does not exist.");
+                    
+                    throw newError;
                 }
                 
                 return Unit.Value;

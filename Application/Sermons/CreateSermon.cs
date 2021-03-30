@@ -41,7 +41,11 @@ namespace Application.Sermons
                 }
                 else
                 {
-                    throw new Exception("Sermon already exists");
+                    var newError = new NewError();
+
+                    newError.AddValue(400, "Sermon already exists.");
+                    
+                    throw newError;
                 }
 
                 return Unit.Value;

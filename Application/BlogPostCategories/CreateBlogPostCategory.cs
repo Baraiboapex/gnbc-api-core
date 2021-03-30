@@ -40,7 +40,11 @@ namespace Application.BlogPostCategories
                     await _context.SaveChangesAsync();
 
                 }else{
-                    throw new Exception("Blog Category already exists!");
+                    var newError = new NewError();
+
+                    newError.AddValue(400,"Blog Category already exists!");
+
+                    throw newError;
                 }
 
                 return Unit.Value;

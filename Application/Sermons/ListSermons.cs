@@ -30,27 +30,27 @@ namespace Application.Sermons
 
                 if(sermons.Count > 0)
                 {
-                    Task<List<Hashtable>> createSermonList = Task<List<Hashtable>>.Factory.StartNew(()=>{
-                        foreach(var sermon in sermons)
-                        {
-                            var outboundItemData = new OutboundDTO();
+                    foreach(var sermon in sermons)
+                    {
+                        var outboundItemData = new OutboundDTO();
 
-                            outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = sermon.Id });
-                            outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = sermon.SermonName });
-                            outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = sermon.SermonDescription });
-                            outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = sermon.SermonVideoLink });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = sermon.Id });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = sermon.SermonName });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = sermon.SermonDescription });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = sermon.SermonVideoLink });
 
-                            sermonsAttach.Add(outboundItemData.GetPayload());
-                        }
-                    
-                        return sermonsAttach;
-                    });
-
-                    return await createSermonList;
+                        sermonsAttach.Add(outboundItemData.GetPayload());
+                    }
+                
+                    return sermonsAttach;
                 }
                 else
                 {
-                    throw new Exception("No sermons were found");
+                    var newError = new NewError();
+
+                    newError.AddValue(400, "No sermons were found.");
+                    
+                    throw newError;
                 }
             }
         }

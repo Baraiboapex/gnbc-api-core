@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Application;
-
+using Application.BlogComments;
 
 namespace API.Controllers
 {
@@ -24,7 +24,7 @@ namespace API.Controllers
         {
             try
             {
-                 return await _mediator.Send(new ListBlogComments.GetComments());
+                 return await _mediator.Send(new ListBlogComments.GetBlogComments());
             }
             catch(NewError ex)
             {
@@ -46,11 +46,11 @@ namespace API.Controllers
         }
 
         [HttpGet("id")]
-        public async Task<ActionResult<Hashtable>> GetBlogComment()
+        public async Task<ActionResult<Hashtable>> GetBlogComment(Guid id)
         {
             try
             {
-                 return await _mediator.Send(new ListBlogComments.GetOneComment());
+                 return await _mediator.Send(new ShowOneBlogComment.GetOneBlogComment{BlogPostId = id});
             }
             catch(NewError ex)
             {
@@ -72,11 +72,11 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Hashtable>> PostBlogComment()
+        public async Task<ActionResult<Unit>> PostBlogComment(BlogCommentDTO blogComment)
         {
             try
             {
-                 return await _mediator.Send(new CreateBlogComment.AddNewComment());
+                 return await _mediator.Send(new CreateBlogComment.AddBlogComment{NewBlogComment = blogComment});
             }
             catch(NewError ex)
             {
@@ -98,11 +98,11 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Hashtable>> DeleteBlogComment(Guid id)
+        public async Task<ActionResult<Unit>> DeleteBlogComment(Guid id)
         {
             try
             {
-                 return await _mediator.Send(new DeleteBlogComment.RemoveComment());
+                 return await _mediator.Send(new DeleteBlogComment.RemoveComment{BlogCommentId = id});
             }
             catch(NewError ex)
             {

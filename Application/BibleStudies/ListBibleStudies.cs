@@ -30,28 +30,27 @@ namespace Application.BibleStudies
 
                 if(bibleStudies.Count > 0)
                 {
-                    Task<List<Hashtable>> createBibleStudyList = Task<List<Hashtable>>.Factory.StartNew(()=>{
-                            foreach(var bibleStudy in bibleStudies)
-                            {
-                                var outboundItemData = new OutboundDTO();
+                    foreach(var bibleStudy in bibleStudies)
+                    {
+                        var outboundItemData = new OutboundDTO();
 
-                                outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = bibleStudy.Id });
-                                outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = bibleStudy.BibleStudyName });
-                                outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = bibleStudy.BibleStudyDescription });
-                                outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = bibleStudy.BibleStudyVideoLink });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = bibleStudy.Id });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = bibleStudy.BibleStudyName });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = bibleStudy.BibleStudyDescription });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = bibleStudy.BibleStudyVideoLink });
 
-                                bibleStudiesAttach.Add(outboundItemData.GetPayload());
-                            }
+                        bibleStudiesAttach.Add(outboundItemData.GetPayload());
+                    }
 
-                            return bibleStudiesAttach;
-                        
-                    });
-
-                    return await createBibleStudyList;
+                    return bibleStudiesAttach;
                 }
                 else
                 {
-                    throw new Exception("No bible studies found.");
+                    var newError = new NewError();
+
+                    newError.AddValue(400,"No bible studies found.");
+
+                    throw newError;
                 }
             }
         }

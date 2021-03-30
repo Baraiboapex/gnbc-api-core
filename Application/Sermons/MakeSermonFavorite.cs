@@ -51,17 +51,29 @@ namespace Application.Sermons
                         }
                         else
                         {
-                            throw new Exception("Blog post study does not exist");
+                            var newError = new NewError();
+
+                            newError.AddValue(404, "Blog post does not exist.");
+                            
+                            throw newError;
                         }
                     }
                     else
                     {
-                        throw new Exception("User favorite study does not exist");
+                        var newError = new NewError();
+
+                        newError.AddValue(404, "User favorite does not exist.");
+                        
+                        throw newError;
                     }
                 }
                 else
                 {
-                    throw new Exception("User does not exist");
+                    var newError = new NewError();
+
+                    newError.AddValue(404, "User does not exist.");
+                    
+                    throw newError;
                 }
 
                 return Unit.Value;

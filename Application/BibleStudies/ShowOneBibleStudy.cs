@@ -32,22 +32,22 @@ namespace Application.BibleStudies
                 
                 if(!bibleDoesNotExist)
                 {
-                    Task<Hashtable> createBibleStudy = Task<Hashtable>.Factory.StartNew(()=>{
-                        var outboundItemData = new OutboundDTO();
+                    var outboundItemData = new OutboundDTO();
 
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = sermon.Id });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = sermon.SermonName });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = sermon.SermonDescription });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = sermon.SermonVideoLink });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = sermon.Id });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = sermon.SermonName });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = sermon.SermonDescription });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = sermon.SermonVideoLink });
 
-                        return outboundItemData.GetPayload();
-                    });
-
-                    return await createBibleStudy;
+                    return outboundItemData.GetPayload();
                 }
                 else
                 {
-                    throw new Exception("Sermon does not exist!");
+                    var newError = new NewError();
+
+                    newError.AddValue(404,"Sermon does not exist.");
+
+                    throw newError;
                 }
                 
             }

@@ -44,7 +44,11 @@ namespace Application.BlogPostCategories
                 }
                 else
                 {
-                    throw new Exception("No blog posts were found");
+                    var newError = new NewError();
+
+                    newError.AddValue(404,"No blog posts were found");
+
+                    throw newError;
                 }
             }
         }

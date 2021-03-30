@@ -34,7 +34,11 @@ namespace Application.Users
                 }
                 else
                 {
-                    throw new Exception("User already exists");
+                    var newError = new NewError();
+
+                    newError.AddValue(400, "User already exists.");
+                    
+                    throw newError;
                 }
 
                 return Unit.Value;

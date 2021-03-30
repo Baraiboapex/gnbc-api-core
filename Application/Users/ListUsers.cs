@@ -29,22 +29,28 @@ namespace Application.Users
 
                 if(users.Count > 0)
                 {
-                    Task<List<Hashtable>> createSermonList = Task<List<Hashtable>>.Factory.StartNew(()=>{
-                        foreach(var user in users)
-                        {
-                            var outboundItemData = new OutboundDTO();
+                    foreach(var user in users)
+                    {
+                        var outboundItemData = new OutboundDTO();
 
-                             usersAttach.Add(outboundItemData.GetPayload());
-                        }
-                    
-                        return usersAttach;
-                    });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "UserId", Value = user.Id });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "FirstName", Value = user.FirstName });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "LastName", Value = user.LastName });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "Email", Value = user.Email });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "UserCanBlog", Value = user.CanBlog });
 
-                    return await createSermonList;
+                        usersAttach.Add(outboundItemData.GetPayload());
+                    }
+                
+                    return usersAttach;
                 }
                 else
                 {
-                    throw new Exception("No users were found");
+                    var newError = new NewError();
+
+                    newError.AddValue(404, "No users were found.");
+                    
+                    throw newError;
                 }
             }
         }

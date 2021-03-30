@@ -40,7 +40,7 @@ namespace Application.BlogPosts
                 {
                     var newError = new NewError();
 
-                    newError.AddValue(400, "Blog post does not exists");
+                    newError.AddValue(404, "Blog post does not exists.");
 
                     throw newError;
                 }

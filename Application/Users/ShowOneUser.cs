@@ -28,8 +28,9 @@ namespace Application.Users
             public async Task<Hashtable> Handle(GetOneUser request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.FindAsync(request.UserId);
+                bool userExists = user != null;
 
-                Task<Hashtable> createUser = Task<Hashtable>.Factory.StartNew(() =>
+                if(userExists)
                 {
                     var outboundItemData = new OutboundDTO();
 
@@ -40,9 +41,15 @@ namespace Application.Users
                     outboundItemData.AddField(new DictionaryEntry { Key = "UserCanBlog", Value = user.CanBlog });
 
                     return outboundItemData.GetPayload();
-                });
+                }
+                else
+                {
+                    var newError = new NewError();
 
-                return await createUser;
+                    newError.AddValue(404, "User does not exist.");
+                    
+                    throw newError;
+                }
             }
         }
     }

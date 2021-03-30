@@ -40,7 +40,11 @@ namespace Application.BlogPostCategories
                 }
                 else
                 {
-                    throw new Exception("Blog category does not exist!");
+                    var newError = new NewError();
+
+                    newError.AddValue(404,"Blog category does not exist!");
+
+                    throw newError;
                 }
 
                 return Unit.Value;
