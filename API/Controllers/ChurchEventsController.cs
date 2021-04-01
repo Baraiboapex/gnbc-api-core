@@ -76,7 +76,7 @@ namespace API.Controllers
         {
             try
             {
-                 return await _mediator.Send(new CreateChurchEvent.AddChurchEvent{ChurchEvent = churchEvent});
+                 return await _mediator.Send(new CreateChurchEvent.AddChurchEvent{NewChurchEvent = churchEvent});
             }
             catch(NewError ex)
             {
@@ -102,7 +102,7 @@ namespace API.Controllers
         {
             try
             {
-                 return await _mediator.Send(new EditChurchEvent.ModifyChurchEvent{ChurchEvent = churchEvent});
+                 return await _mediator.Send(new EditChurchEvent.ModifyChurchEvent{ChurchEventToEdit = churchEvent});
             }
             catch(NewError ex)
             {

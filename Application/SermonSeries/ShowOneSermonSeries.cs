@@ -11,20 +11,20 @@ namespace Application.SermonSeries
 {
     public class ShowOneSermonSeries
     {
-        public class GetOneSermon : IRequest<Hashtable>
+        public class GetOneSermonSeries : IRequest<Hashtable>
         {
             public Guid SermonSeriesToGet { get; set; }
         }
 
-        public class GetOneSermonHandler : IRequestHandler<GetOneSermon, Hashtable>
+        public class GetOneSermonSeriesHandler : IRequestHandler<GetOneSermonSeries, Hashtable>
         {
             private readonly GNBCContext _context;
-            public GetOneSermonHandler(GNBCContext context)
+            public GetOneSermonSeriesHandler(GNBCContext context)
             {
                 _context = context;
             }
 
-            public async Task<Hashtable> Handle(GetOneSermon request, CancellationToken cancellationToken)
+            public async Task<Hashtable> Handle(GetOneSermonSeries request, CancellationToken cancellationToken)
             {
                 var currentSermonSeries = await _context.SermonSeries.FindAsync(request.SermonSeriesToGet);
                 bool sermonSeriesExists = currentSermonSeries != null;
