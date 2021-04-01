@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
+using Domain.InDTOs;
 using MediatR;
 using Persistence;
 
@@ -11,7 +12,7 @@ namespace Application.Users
     {
         public class ModifyUser : IRequest
         {
-            public User UserToEdit { get; set; }
+            public UserDTO UserToEdit { get; set; }
         }
 
         public class ModifyUserHandler : IRequestHandler<ModifyUser>

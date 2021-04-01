@@ -1,19 +1,14 @@
 using System;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
 
-namespace Domain
+namespace Domain.InDTOs
 {
-    public class ChurchEvent : BaseEntity
+    public class ChurchEventDTO
     {
-        [Required]
+        public Guid Id {get; set;}
         public string ChurchEventName {get; set;}
-        [Required]
         public string ChurchEventDescription {get; set;}
-        [Required]
         public string ChurchEventDate {get; set;}
         public string ChurchEventFacebookLink {get; set;}
         public string ChurchEventImage {get; set;}
-        public virtual ICollection<UserFavorite> UserFavorites {get; set;}
     }
 }

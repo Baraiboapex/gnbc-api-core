@@ -27,6 +27,12 @@ namespace Persistence
             modelBuilder.Entity<User>().HasMany(u => u.BlogPosts).WithOne(b => b.User);
             modelBuilder.Entity<User>().HasOne(u => u.UserFavorite).WithOne(uf => uf.User).HasForeignKey<UserFavorite>(u => u.UserId);
 
+            //User favorite relationships;
+            modelBuilder.Entity<UserFavorite>().HasMany(uf => uf.Sermons).WithMany(s => s.UserFavorites);
+            modelBuilder.Entity<UserFavorite>().HasMany(uf => uf.ChurchEvents).WithMany(s => s.UserFavorites);
+            modelBuilder.Entity<UserFavorite>().HasMany(uf => uf.BlogPosts).WithMany(s => s.UserFavorites);
+            modelBuilder.Entity<UserFavorite>().HasMany(uf => uf.BibleStudies).WithMany(s => s.UserFavorites);
+
             //Blog post entity relationships
             modelBuilder.Entity<BlogPost>().HasMany(bp => bp.BlogCategories).WithMany(bc => bc.BlogPosts);
             

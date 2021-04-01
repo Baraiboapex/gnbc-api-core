@@ -34,18 +34,14 @@ namespace Application.Sermons
                 
                 if(!sermonDoesNotExist)
                 {
-                    Task<Hashtable> createSermon = Task<Hashtable>.Factory.StartNew(()=>{
-                        var outboundItemData = new OutboundDTO();
+                    var outboundItemData = new OutboundDTO();
 
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = sermon.Id });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = sermon.SermonName });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = sermon.SermonDescription });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = sermon.SermonVideoLink });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = sermon.Id });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = sermon.SermonName });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = sermon.SermonDescription });
+                    outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = sermon.SermonVideoLink });
 
-                        return outboundItemData.GetPayload();
-                    });
-
-                    return await createSermon;
+                    return outboundItemData.GetPayload();
                 }
                 else
                 {

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
+using Domain.InDTOs;
 using MediatR;
 using Persistence;
 
@@ -12,7 +13,7 @@ namespace Application.Users
     {
         public class AddUser : IRequest
         {
-            public User UserToAdd { get; set; }
+            public UserDTO UserToAdd { get; set; }
         }
 
         public class AddUserHandler : IRequestHandler<AddUser>
@@ -29,7 +30,14 @@ namespace Application.Users
 
                 if(userDoesNotExist)
                 {
-                    _context.Users.Add(request.UserToAdd);
+                    var user = new User();
+
+                    user.FirstName = request.UserToAdd.FirstName;
+                    user.LastName = request.UserToAdd.LastName;
+                    user.Email = request.UserToAdd.Email;
+                    user.Password = request.UserToAdd.Password;
+
+                    _context.Users.Add(user);
                     await _context.SaveChangesAsync();
                 }
                 else

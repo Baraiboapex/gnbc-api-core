@@ -13,5 +13,6 @@ namespace Domain
         public virtual ICollection<BlogPost> BlogPosts {get; set;}
         public virtual ICollection<Sermon> Sermons {get; set;}
         public virtual ICollection<BibleStudy> BibleStudies {get; set;}
+        public virtual ICollection<ChurchEvent> ChurchEvents {get; set;}
     }
 }

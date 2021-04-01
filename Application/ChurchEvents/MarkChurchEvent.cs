@@ -13,6 +13,10 @@ namespace Application.ChurchEvents
 {
     public class MarkChurchEvent
     {
-        
+        public class MarkEvent : IRequest
+        {
+            public Guid UserId {get; set;}
+            public Guid ChurchEventId {get; set;}
+        }
     }
 }
