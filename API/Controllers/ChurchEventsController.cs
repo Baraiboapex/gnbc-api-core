@@ -72,7 +72,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostChurchEvents(ChurchEventDTO churchEvent)
+        public async Task<ActionResult<Unit>> PostChurchEvents([FromForm] ChurchEventDTO churchEvent)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Unit>> PutChurchEvents(ChurchEventDTO churchEvent)
+        public async Task<ActionResult<Unit>> PutChurchEvents([FromForm] ChurchEventDTO churchEvent)
         {
             try
             {
@@ -149,13 +149,12 @@ namespace API.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
         }
 
-        [HttpPut]
-        [Route("api/[controller]/markchurchevent")]
-        public async Task<ActionResult<Unit>> MarkChurchEvent(AddUserToFavoriteDTO favorite)
+        [HttpPut("markchurchevent")]
+        public async Task<ActionResult<Unit>> MarkChurchEvent([FromForm] AddUserToFavoriteDTO favorite)
         {
             try
             {
-                 return await _mediator.Send(new MarkChurchEvent.MarkEvent{UserId = favorite.UserId, ChurchEventId = favorite.ItemId, });
+                 return await _mediator.Send(new MarkChurchEvent.MarkEvent{UserId = favorite.ParentId, ChurchEventId = favorite.ItemId, });
             }
             catch(NewError ex)
             {

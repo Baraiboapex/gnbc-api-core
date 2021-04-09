@@ -20,7 +20,7 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        public async Task<ActionResult<List<Hashtable>>> GetSermons()
+        public async Task<ActionResult<List<Hashtable>>> GetSermonSeries()
         {
             try
             {
@@ -45,7 +45,7 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Hashtable>> GetSermons(Guid id)
+        public async Task<ActionResult<Hashtable>> GetSermonSeries(Guid id)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostSermon(SermonSeriesDTO sermonSeries)
+        public async Task<ActionResult<Unit>> PostSermonSeries([FromForm] SermonSeriesDTO sermonSeries)
         {
             try
             {
@@ -95,7 +95,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Unit>> PutSermon(SermonSeriesDTO sermon)
+        public async Task<ActionResult<Unit>> PutSermonSeries([FromForm] SermonSeriesDTO sermon)
         {
             try
             {
@@ -120,7 +120,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unit>> DeleteSermon(Guid id)
+        public async Task<ActionResult<Unit>> DeleteSermonSeries(Guid id)
         {
             try
             {

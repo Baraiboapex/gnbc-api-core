@@ -71,7 +71,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostBlogPost(BlogPostDTO blogPost){
+        public async Task<ActionResult<Unit>> PostBlogPost([FromForm] BlogPostDTO blogPost){
              try
             {
                  return await _mediator.Send(new CreateBlogPost.AddBlogPost{PostToAdd = blogPost});
@@ -96,7 +96,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Unit>> PutBlogPost(BlogPostDTO blogPost){
+        public async Task<ActionResult<Unit>> PutBlogPost([FromForm] BlogPostDTO blogPost){
              try
             {
                  return await _mediator.Send(new EditBlogPost.ModifyBlogPost{BlogPostToEdit = blogPost});
@@ -119,5 +119,58 @@ namespace API.Controllers
 
             return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
         }
+
+        [HttpPut("makefarvorite")]
+        public async Task<ActionResult<Unit>> MakeBlogPostFavorite([FromForm] AddUserToFavoriteDTO userFavorite)
+        {
+            try
+            {
+                return await _mediator.Send(new MakeBlogPostFavorite.AddToFavorites{BlogPostId= userFavorite.ItemId, UserId = userFavorite.ParentId});
+            }
+            catch(NewError ex)
+            {
+                if((int)ex.GetError()["Code"] == 400)
+                {
+                    return BadRequest(ex.Message);
+                }
+                else if((int)ex.GetError()["Code"] == 404)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                }
+                else if((int)ex.GetError()["Code"] == 401)
+                {
+                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                }
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Unit>> DeleteBlogPost(Guid id){
+             try
+            {
+                 return await _mediator.Send(new DeleteBlogPost.RemoveBlogPost{BlogPostId = id});
+            }
+            catch(NewError ex)
+            {
+                if((int)ex.GetError()["Code"] == 400)
+                {
+                    return BadRequest(ex.Message);
+                }
+                else if((int)ex.GetError()["Code"] == 404)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                }
+                else if((int)ex.GetError()["Code"] == 401)
+                {
+                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                }
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
+        }
     }
+
+
 }

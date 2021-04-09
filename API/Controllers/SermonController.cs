@@ -71,7 +71,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostSermon(SermonDTO sermon)
+        public async Task<ActionResult<Unit>> PostSermon([FromForm] SermonDTO sermon)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Unit>> PutSermon(SermonDTO sermon)
+        public async Task<ActionResult<Unit>> PutSermon([FromForm] SermonDTO sermon)
         {
             try
             {
@@ -145,13 +145,12 @@ namespace API.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
         }
 
-        [HttpPut]
-        [Route("api/[controller]/makefarvorite")]
-        public async Task<ActionResult<Unit>> MakeSermonFavorite(AddUserToFavoriteDTO userFavorite)
+        [HttpPut("makefarvorite")]
+        public async Task<ActionResult<Unit>> MakeSermonFavorite([FromForm] AddUserToFavoriteDTO userFavorite)
         {
             try
             {
-                return await _mediator.Send(new MakeSermonFavorite.AddToFavorites{SermonId = userFavorite.ItemId, UserId = userFavorite.UserId});
+                return await _mediator.Send(new MakeSermonFavorite.AddToFavorites{SermonId = userFavorite.ItemId, UserId = userFavorite.ParentId});
             }
             catch(NewError ex)
             {

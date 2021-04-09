@@ -73,7 +73,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostUser(UserDTO user)
+        public async Task<ActionResult<Unit>> PostUser([FromForm] UserDTO user)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Unit>> PutUser(UserDTO user)
+        public async Task<ActionResult<Unit>> PutUser([FromForm] UserDTO user)
         {
             try
             {
@@ -120,7 +120,6 @@ namespace API.Controllers
                     return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
                 }
             }
-
             return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
         }
 
@@ -130,6 +129,32 @@ namespace API.Controllers
             try
             {
                  return await _mediator.Send(new DeleteUser.RemoveUser{UserId= id});
+            }
+            catch(NewError ex)
+            {
+                if((int)ex.GetError()["Code"] == 400)
+                {
+                    return BadRequest(ex.Message);
+                }
+                else if((int)ex.GetError()["Code"] == 404)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                }
+                else if((int)ex.GetError()["Code"] == 401)
+                {
+                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                }
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
+        }
+
+        [HttpGet("getuserfavorites/{id}")]
+        public async Task<ActionResult<Hashtable>> GetUserFavorites(Guid id)
+        {
+            try
+            {
+                 return await _mediator.Send(new GetUserFavoriteItems.GetFavoriteUserItems{UserId = id});
             }
             catch(NewError ex)
             {

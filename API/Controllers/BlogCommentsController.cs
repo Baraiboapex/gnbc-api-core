@@ -20,37 +20,12 @@ namespace API.Controllers
             _mediator = mediator;
         }
 
-        public async Task<ActionResult<List<Hashtable>>> GetBlogComments()
+        [HttpGet("{id}")]
+        public async Task<ActionResult<List<Hashtable>>> GetBlogComment(Guid id)
         {
             try
             {
-                 return await _mediator.Send(new ListBlogComments.GetBlogComments());
-            }
-            catch(NewError ex)
-            {
-                if((int)ex.GetError()["Code"] == 400)
-                {
-                    return BadRequest(ex.Message);
-                }
-                else if((int)ex.GetError()["Code"] == 404)
-                {
-                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
-                }
-                else if((int)ex.GetError()["Code"] == 401)
-                {
-                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
-                }
-            }
-
-            return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
-        }
-
-        [HttpGet("id")]
-        public async Task<ActionResult<Hashtable>> GetBlogComment(Guid id)
-        {
-            try
-            {
-                 return await _mediator.Send(new ShowOneBlogComment.GetOneBlogComment{BlogPostId = id});
+                 return await _mediator.Send(new ListBlogComments.GetBlogComments{ BlogPostId = id});
             }
             catch(NewError ex)
             {
@@ -72,7 +47,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostBlogComment(BlogCommentDTO blogComment)
+        public async Task<ActionResult<Unit>> PostBlogComment([FromForm] BlogCommentDTO blogComment)
         {
             try
             {

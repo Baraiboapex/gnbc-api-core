@@ -22,6 +22,7 @@ namespace API.Controllers
 
         }
 
+        [HttpGet]
         public async Task<ActionResult<List<Hashtable>>> GetBlogCategories()
         {
             try
@@ -48,7 +49,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostBlogCategory(BlogPostCategoryDTO blogCategory)
+        public async Task<ActionResult<Unit>> PostBlogCategory([FromForm] BlogPostCategoryDTO blogCategory)
         {
              try
             {
@@ -74,7 +75,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Unit>> PutBlogCategory(BlogPostCategoryDTO blogCategory)
+        public async Task<ActionResult<Unit>> PutBlogCategory([FromForm] BlogPostCategoryDTO blogCategory)
         {
             try
             {

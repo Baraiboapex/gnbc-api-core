@@ -72,7 +72,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Unit>> PostBibleStudy(BibleStudyDTO bibleStudy)
+        public async Task<ActionResult<Unit>> PostBibleStudy([FromForm] BibleStudyDTO bibleStudy)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Unit>> PutBibleStudy(BibleStudyDTO bibleStudy)
+        public async Task<ActionResult<Unit>> PutBibleStudy([FromForm] BibleStudyDTO bibleStudy)
         {
             try
             {
@@ -123,13 +123,12 @@ namespace API.Controllers
             return StatusCode(StatusCodes.Status500InternalServerError, "You screwed up bad!");
         }
 
-        [HttpPut]
-        [Route("api/[controller]/makefarvorite")]
-        public async Task<ActionResult<Unit>> MakeBibleStudyFavorite(AddUserToFavoriteDTO userFavorite)
+        [HttpPut("makefarvorite")]
+        public async Task<ActionResult<Unit>> MakeBibleStudyFavorite([FromForm] AddUserToFavoriteDTO userFavorite)
         {
             try
             {
-                return await _mediator.Send(new MakeBibleStudyFavorite.AddToFavorites{BibleStudyId = userFavorite.ItemId, UserId = userFavorite.UserId});
+                return await _mediator.Send(new MakeBibleStudyFavorite.AddToFavorites{BibleStudyId = userFavorite.ItemId, UserId = userFavorite.ParentId});
             }
             catch(NewError ex)
             {
