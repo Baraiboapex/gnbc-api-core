@@ -31,15 +31,15 @@ namespace API.Controllers
             {
                 if((int)ex.GetError()["Code"] == 400)
                 {
-                    return BadRequest(ex.Message);
+                    return BadRequest(ex.GetError()["Message"]);
                 }
                 else if((int)ex.GetError()["Code"] == 404)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                    return StatusCode(StatusCodes.Status404NotFound, ex.GetError()["Message"]);
                 }
                 else if((int)ex.GetError()["Code"] == 401)
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                    return StatusCode(StatusCodes.Status401Unauthorized, ex.GetError()["Message"]);
                 }
             }
 
@@ -61,11 +61,11 @@ namespace API.Controllers
                 }
                 else if((int)ex.GetError()["Code"] == 404)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                    return StatusCode(StatusCodes.Status404NotFound, ex.GetError()["Message"]);
                 }
                 else if((int)ex.GetError()["Code"] == 401)
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                    return StatusCode(StatusCodes.Status401Unauthorized, ex.GetError()["Message"]);
                 }
             }
 
@@ -87,11 +87,11 @@ namespace API.Controllers
                 }
                 else if((int)ex.GetError()["Code"] == 404)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                    return StatusCode(StatusCodes.Status404NotFound, ex.GetError()["Message"]);
                 }
                 else if((int)ex.GetError()["Code"] == 401)
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                    return StatusCode(StatusCodes.Status401Unauthorized, ex.GetError()["Message"]);
                 }
             }
 

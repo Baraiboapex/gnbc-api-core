@@ -1,5 +1,5 @@
 using System.ComponentModel.DataAnnotations;
-
+using System;
 namespace Domain
 {
     public class BlogComment : BaseEntity
@@ -8,6 +8,6 @@ namespace Domain
         [MinLength(20)]
         public string CommentContent {get; set;}
         public virtual BlogPost BlogPost {get; set;}
-        public virtual User User {get; set;}
+        public virtual User User { get; set; }
     }
 }

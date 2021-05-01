@@ -29,40 +29,26 @@ namespace Application.BlogPosts
 
             public async Task<Unit> Handle(AddToFavorites request, CancellationToken cancellationToken)
             {
-                var currentUser = await _context.Users.FindAsync(request.UserId);
-                bool userDoesNotExist = currentUser == null;
+                var currentUserFavorite = await _context.UserFavorites.Include(uf => uf.BlogPosts).SingleOrDefaultAsync(u => u.UserId == request.UserId);
+                var currentBlogPost = await _context.BlogPosts.Include(bp => bp.UserFavorites).SingleOrDefaultAsync(bp => bp.Id == request.BlogPostId);
 
-                if(!userDoesNotExist)
-                {   
-                    var currentUserFavorite = await _context.UserFavorites.FindAsync(request.UserId);
-                    bool userFavoriteDoesNotExist = currentUserFavorite == null;
-                    
-                    if(!userFavoriteDoesNotExist)
+                bool userExists = currentUserFavorite != null;
+                bool blogPostExists = currentBlogPost != null;
+
+                if(userExists)
+                {
+                    if(blogPostExists)
                     {
-                        var currentBlogPost = await _context.BlogPosts.FindAsync(request.BlogPostId);
-                        bool blogPostDoesNotExist = currentBlogPost == null;
-                    
-                        if(!blogPostDoesNotExist)
-                        {
-                            currentUser.UserFavorite.BlogPosts.Add(currentBlogPost);
-                            currentBlogPost.UserFavorites.Add(currentUser.UserFavorite);
+                        currentUserFavorite.BlogPosts.Add(currentBlogPost);
+                        currentBlogPost.UserFavorites.Add(currentUserFavorite);
 
-                            await _context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            var newError = new NewError();
-
-                            newError.AddValue(404, "Blog post does not exist.");
-
-                            throw newError;
-                        }
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
                         var newError = new NewError();
 
-                        newError.AddValue(404, "User favorite does not exist.");
+                        newError.AddValue(404, "Blog post does not exist");
 
                         throw newError;
                     }
@@ -71,7 +57,7 @@ namespace Application.BlogPosts
                 {
                     var newError = new NewError();
 
-                    newError.AddValue(404, "User does not exist.");
+                    newError.AddValue(404, "User does not exist");
 
                     throw newError;
                 }

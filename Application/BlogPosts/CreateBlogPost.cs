@@ -9,7 +9,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-
 namespace Application.BlogPosts
 {
     public class CreateBlogPost
@@ -30,8 +29,10 @@ namespace Application.BlogPosts
 
             public async Task<Unit> Handle(AddBlogPost request, CancellationToken cancellationToken)
             {
-
-                bool blogPostDoesNotExist = (await  _context.BlogPosts.FindAsync(request.PostToAdd.BlogPostTitle)) == null;
+                var currentBlog = await _context.BlogPosts.SingleOrDefaultAsync(bp => bp.BlogPostTitle == request.PostToAdd.BlogPostTitle);
+                var currentUser = await _context.Users.SingleOrDefaultAsync(u => u.Id == request.PostToAdd.UserId);
+                bool blogPostDoesNotExist = currentBlog == null;
+                bool userExists = currentUser != null;
 
                 if(blogPostDoesNotExist)
                 {
@@ -43,6 +44,25 @@ namespace Application.BlogPosts
 
                     _context.BlogPosts.Add(blogPost);
                     await _context.SaveChangesAsync();
+
+                    if(userExists)
+                    {
+                        currentUser.BlogPosts.Add(blogPost);
+                        blogPost.User = currentUser;
+
+                        _context.Entry(currentUser).State = EntityState.Modified;
+
+                        _context.Users.Attach(currentUser);
+                        await _context.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        var newError = new NewError();
+
+                        newError.AddValue(404, "User does not exist");
+
+                        throw newError;
+                    }
                 }
                 else
                 {

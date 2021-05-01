@@ -57,7 +57,11 @@ namespace Application.BlogPosts
                 } 
                 else 
                 {
-                    throw new Exception("No blog posts were found");
+                    var newError = new NewError();
+
+                    newError.AddValue(404, "No blog posts were found.");
+
+                    throw newError;
                 }
             }
         }
@@ -76,9 +80,9 @@ namespace Application.BlogPosts
             {
                 var blogPost = await _context.BlogPosts.FindAsync(request.BlogPostId);
 
-                bool blogPostDoesNotExist = blogPost == null;
+                bool blogPostExists = blogPost != null;
 
-                if(!blogPostDoesNotExist)
+                if(blogPostExists)
                 {
                     OutboundDTO outboundItemData = new OutboundDTO();
 

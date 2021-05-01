@@ -87,7 +87,8 @@ namespace Persistence
                         LastName = "Bailey",
                         Email = "matthewpbaileydesigns@gmail.com",
                         Password="Welcome1",
-                        CanBlog = true
+                        CanBlog = true,
+                        UserFavorite = new UserFavorite()
                     },
                     new User
                     {
@@ -95,13 +96,48 @@ namespace Persistence
                         LastName = "Bailey",
                         Email = "pastorsteve1998@gmail.com",
                         Password="Welcome1",
-                        CanBlog = true
+                        CanBlog = true,
+                        UserFavorite = new UserFavorite()
                     },
                 };
 
                 await context.Users.AddRangeAsync(users);
                 await context.SaveChangesAsync();
-            };
+            }
+
+            if (!context.ChurchEvents.Any())
+            {
+                var churchEvents = new List<ChurchEvent>
+                {
+                    new ChurchEvent
+                    {
+                        ChurchEventName = "A church event",
+                        ChurchEventDescription ="This is an event",
+                        ChurchEventDate ="12-13-2022",
+                        ChurchEventFacebookLink ="#", 
+                        ChurchEventImage ="#"
+                    },
+                    new ChurchEvent
+                    {
+                        ChurchEventName = "Another church event",
+                        ChurchEventDescription ="This is another event",
+                        ChurchEventDate ="12-14-2022",
+                        ChurchEventFacebookLink ="#", 
+                        ChurchEventImage ="#"
+                    },
+                    new ChurchEvent
+                    {
+                        ChurchEventName = "Yet another church event",
+                        ChurchEventDescription ="This is yet another event",
+                        ChurchEventDate ="12-14-2022",
+                        ChurchEventFacebookLink ="#", 
+                        ChurchEventImage ="#"
+                    },
+                };
+
+                await context.ChurchEvents.AddRangeAsync(churchEvents);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

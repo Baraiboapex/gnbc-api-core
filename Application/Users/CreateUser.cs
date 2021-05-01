@@ -5,7 +5,7 @@ using Domain;
 using Domain.InDTOs;
 using MediatR;
 using Persistence;
-
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users
 {
@@ -26,7 +26,8 @@ namespace Application.Users
 
             public async Task<Unit> Handle(AddUser request, CancellationToken cancellationToken)
             {
-                bool userDoesNotExist = (await _context.Users.FindAsync(request.UserToAdd.Email)) == null;
+                var currentUser = await _context.Users.SingleOrDefaultAsync(u=> u.Email ==request.UserToAdd.Email);
+                bool userDoesNotExist = currentUser == null;
 
                 if(userDoesNotExist)
                 {

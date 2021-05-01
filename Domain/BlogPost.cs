@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System;
 
 namespace Domain
 {
@@ -11,9 +12,9 @@ namespace Domain
         [MinLength(20)]
         public string BlogPostContent {get; set;}
         public string BlogPostImage {get; set;}
-        public virtual ICollection<BlogComment> BlogPostComments {get; set;}
-        public virtual ICollection<BlogPostCategory> BlogCategories {get; set;}
-        public virtual ICollection<UserFavorite> UserFavorites {get; set;}
+        public virtual ICollection<BlogComment> BlogPostComments { get; set; }
+        public virtual ICollection<BlogPostCategory> BlogCategories { get; set; }
+        public virtual ICollection<UserFavorite> UserFavorites { get; set; }
         public virtual User User {get; set;}
         public int BlogPostViews {get; set;}
         public int BlogPostShares {get; set;}

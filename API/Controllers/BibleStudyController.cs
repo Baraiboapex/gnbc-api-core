@@ -9,12 +9,14 @@ using Microsoft.AspNetCore.Mvc;
 using Application;
 using Domain.InDTOs;
 using Application.BibleStudies;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     public class BibleStudyController : BaseApiController
     {
         private readonly IMediator _mediator;
+        
         public BibleStudyController(IMediator mediator)
         {
             _mediator = mediator;
@@ -72,6 +74,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult<Unit>> PostBibleStudy([FromForm] BibleStudyDTO bibleStudy)
         {
             try
@@ -98,6 +101,7 @@ namespace API.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public async Task<ActionResult<Unit>> PutBibleStudy([FromForm] BibleStudyDTO bibleStudy)
         {
             try
@@ -124,6 +128,7 @@ namespace API.Controllers
         }
 
         [HttpPut("makefarvorite")]
+        [Authorize]
         public async Task<ActionResult<Unit>> MakeBibleStudyFavorite([FromForm] AddUserToFavoriteDTO userFavorite)
         {
             try
@@ -134,15 +139,15 @@ namespace API.Controllers
             {
                 if((int)ex.GetError()["Code"] == 400)
                 {
-                    return BadRequest(ex.Message);
+                    return BadRequest(ex.GetError()["Message"]);
                 }
                 else if((int)ex.GetError()["Code"] == 404)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                    return StatusCode(StatusCodes.Status404NotFound, ex.GetError()["Message"]);
                 }
                 else if((int)ex.GetError()["Code"] == 401)
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                    return StatusCode(StatusCodes.Status401Unauthorized, ex.GetError()["Message"]);
                 }
             }
 
@@ -150,6 +155,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult<Unit>> DeleteBibleStudy(Guid Id)
         {
             try
@@ -160,15 +166,15 @@ namespace API.Controllers
             {
                 if((int)ex.GetError()["Code"] == 400)
                 {
-                    return BadRequest(ex.Message);
+                    return BadRequest(ex.GetError()["Message"]);
                 }
                 else if((int)ex.GetError()["Code"] == 404)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound, ex.Message);
+                    return StatusCode(StatusCodes.Status404NotFound, ex.GetError()["Message"]);
                 }
                 else if((int)ex.GetError()["Code"] == 401)
                 {
-                    return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                    return StatusCode(StatusCodes.Status401Unauthorized, ex.GetError()["Message"]);
                 }
             }
 

@@ -5,6 +5,7 @@ using Domain;
 using Domain.InDTOs;
 using MediatR;
 using Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.SermonSeries
 {
@@ -25,7 +26,7 @@ namespace Application.SermonSeries
 
             public async Task<Unit> Handle(AddNewSermonSeries request, CancellationToken cancellationToken)
             {
-                var currentSermonSeries = await _context.SermonSeries.FindAsync(request.SermonSeriesToAdd.SeriesName);
+                var currentSermonSeries = await _context.SermonSeries.SingleOrDefaultAsync(ss => ss.SeriesName == request.SermonSeriesToAdd.SeriesName);
                 bool sermonSeriesDoesNotExist = currentSermonSeries == null;
 
                 if(sermonSeriesDoesNotExist)

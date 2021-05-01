@@ -28,9 +28,9 @@ namespace Application.BlogComments
 
             public async Task<List<Hashtable>> Handle(GetBlogComments request, CancellationToken cancellationToken)
             {
-                var blogPost = await _context.BlogPosts.FindAsync(request.BlogPostId);
+                var blogPost = await _context.BlogPosts.Include(bc => bc.BlogPostComments).ThenInclude(bc => bc.User).SingleOrDefaultAsync(bp => bp.Id == request.BlogPostId);
                 var blogPostComments = blogPost.BlogPostComments;
-                
+
                 if(blogPostComments.Count > 0)
                 {
                     var blogCommentsAttach = new List<Hashtable>();
@@ -41,14 +41,13 @@ namespace Application.BlogComments
 
                         outboundItemData.AddField(new DictionaryEntry { Key = "BlogCommentId", Value = blogComment.Id });
                         outboundItemData.AddField(new DictionaryEntry {Key = "CommentContent", Value = blogComment.CommentContent});
-                        
+
                         var outboundSecondChildItem = new OutboundDTO();
 
-                        outboundSecondChildItem.AddField(new DictionaryEntry {Key = "UserId", Value = blogComment.User.Id});
-                        outboundSecondChildItem.AddField(new DictionaryEntry {Key = "FirstName", Value = blogComment.User.FirstName});
-                        outboundSecondChildItem.AddField(new DictionaryEntry {Key = "LastName", Value = blogComment.User.LastName});
+                        outboundSecondChildItem.AddField(new DictionaryEntry { Key = "UserId", Value = blogComment.User.Id });
+                        outboundSecondChildItem.AddField(new DictionaryEntry { Key = "Email", Value = blogComment.User.Email });
 
-                        outboundItemData.AddField(new DictionaryEntry {Key = "User", Value = outboundSecondChildItem.GetPayload()});
+                        outboundItemData.AddField(new DictionaryEntry { Key = "User", Value = outboundSecondChildItem.GetPayload() });
 
                         blogCommentsAttach.Add(outboundItemData.GetPayload());
                     }

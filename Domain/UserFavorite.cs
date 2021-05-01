@@ -8,6 +8,7 @@ namespace Domain
         public int BibleStudyCount {get; set;}
         public int SermonCount {get; set;}
         public int BlogPostCount {get; set;}
+        public int ChurchEventsCount {get; set;}
         public Guid? UserId {get; set;}
         public virtual User User {get; set;}
         public virtual ICollection<BlogPost> BlogPosts {get; set;}

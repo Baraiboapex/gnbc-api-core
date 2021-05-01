@@ -29,38 +29,26 @@ namespace Application.BibleStudies
 
             public async Task<Unit> Handle(AddToFavorites request, CancellationToken cancellationToken)
             {
-                var currentUser = await _context.Users.FindAsync(request.UserId);
-                bool userDoesNotExist = currentUser == null;
+                var currentUserFavorite = await _context.UserFavorites.Include(uf => uf.BibleStudies).SingleOrDefaultAsync(uf => uf.UserId == request.UserId);
+                var currentBibleStudy = await _context.BibleStudies.Include(b => b.UserFavorites).SingleOrDefaultAsync(b => b.Id == request.BibleStudyId);
 
-                if(!userDoesNotExist)
-                {   
-                    var currentUserFavorite = await _context.UserFavorites.FindAsync(request.UserId);
-                    bool userFavoriteDoesNotExist = currentUserFavorite == null;
+                bool userExists = currentUserFavorite != null;
+                bool bibleStudyExists = currentBibleStudy != null;
 
-                    if(!userFavoriteDoesNotExist)
+                if(userExists)
+                {
+                    if(bibleStudyExists)
                     {
-                        var currentBibleStudy = await _context.BibleStudies.FindAsync(request.BibleStudyId);
-                        bool bibleDoesNotExist = currentBibleStudy == null;
-                    
-                        if(!bibleDoesNotExist)
-                        {
-                            currentUser.UserFavorite.BibleStudies.Add(currentBibleStudy);
-                            currentBibleStudy.UserFavorites.Add(currentUser.UserFavorite);
-                        }
-                        else
-                        {
-                            var newError = new NewError();
+                        currentUserFavorite.BibleStudies.Add(currentBibleStudy);
+                        currentBibleStudy.UserFavorites.Add(currentUserFavorite);
 
-                            newError.AddValue(404,"Bible study does not exist.");
-
-                            throw newError;
-                        }
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
                         var newError = new NewError();
 
-                        newError.AddValue(404,"User favorite study does not exist.");
+                        newError.AddValue(404, "Bible study does not exist");
 
                         throw newError;
                     }
@@ -69,7 +57,7 @@ namespace Application.BibleStudies
                 {
                     var newError = new NewError();
 
-                    newError.AddValue(404,"User does not exist.");
+                    newError.AddValue(404, "User does not exist");
 
                     throw newError;
                 }

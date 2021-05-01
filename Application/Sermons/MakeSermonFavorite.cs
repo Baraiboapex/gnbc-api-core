@@ -29,41 +29,27 @@ namespace Application.Sermons
 
             public async Task<Unit> Handle(AddToFavorites request, CancellationToken cancellationToken)
             {
-                var currentUser = await _context.Users.FindAsync(request.UserId);
-                bool userDoesNotExist = currentUser == null;
+                var currentUserFavorite = await _context.UserFavorites.Include(uf => uf.Sermons).SingleOrDefaultAsync(uf => uf.UserId == request.UserId);
+                var currentSermons = await _context.Sermons.Include(s => s.UserFavorites).SingleOrDefaultAsync(s => s.Id == request.SermonId);
 
-                if(!userDoesNotExist)
-                {   
-                    var currentUserFavorite = await _context.UserFavorites.FindAsync(request.UserId);
-                    bool userFavoriteDoesNotExist = currentUserFavorite == null;
-                    
-                    if(!userFavoriteDoesNotExist)
+                bool sermonExists = currentSermons != null;
+                bool userExists = currentUserFavorite != null;
+
+                if(userExists)
+                {
+                    if(sermonExists)
                     {
-                        var currentSermon = await _context.Sermons.FindAsync(request.SermonId);
-                        bool sermonDoesNotExist = currentSermon == null;
-                    
-                        if(!sermonDoesNotExist)
-                        {
-                            currentUser.UserFavorite.Sermons.Add(currentSermon);
-                            currentSermon.UserFavorites.Add(currentUser.UserFavorite);
+                        currentUserFavorite.Sermons.Add(currentSermons);
+                        currentSermons.UserFavorites.Add(currentUserFavorite);
 
-                            await _context.SaveChangesAsync();
-                        }
-                        else
-                        {
-                            var newError = new NewError();
-
-                            newError.AddValue(404, "Blog post does not exist.");
-                            
-                            throw newError;
-                        }
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
                         var newError = new NewError();
 
-                        newError.AddValue(404, "User favorite does not exist.");
-                        
+                        newError.AddValue(404, "Sermon does not exist");
+
                         throw newError;
                     }
                 }
@@ -71,8 +57,8 @@ namespace Application.Sermons
                 {
                     var newError = new NewError();
 
-                    newError.AddValue(404, "User does not exist.");
-                    
+                    newError.AddValue(404, "Event does not exist");
+
                     throw newError;
                 }
 

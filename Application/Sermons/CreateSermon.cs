@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Domain;
 using Domain.InDTOs;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Sermons
@@ -26,7 +27,8 @@ namespace Application.Sermons
 
             public async Task<Unit> Handle(NewSermon request, CancellationToken cancellationToken)
             {
-                bool sermonDoesNotExist = (await _context.Sermons.FindAsync(request.AddSermon.SermonName)) == null;
+                var currentSermon = await _context.Sermons.SingleOrDefaultAsync(s => s.SermonName == request.AddSermon.SermonName);
+                bool sermonDoesNotExist = currentSermon  == null;
 
                 if(sermonDoesNotExist)
                 {

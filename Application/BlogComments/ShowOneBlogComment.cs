@@ -38,14 +38,6 @@ namespace Application.BlogComments
                     outboundItemData.AddField(new DictionaryEntry { Key = "BlogCommentId", Value = currentBlogComment.Id });
                     outboundItemData.AddField(new DictionaryEntry {Key = "CommentContent", Value = currentBlogComment.CommentContent});
                     
-                    var outboundSecondChildItem = new OutboundDTO();
-
-                    outboundSecondChildItem.AddField(new DictionaryEntry {Key = "UserId", Value = currentBlogComment.User.Id});
-                    outboundSecondChildItem.AddField(new DictionaryEntry {Key = "FirstName", Value = currentBlogComment.User.FirstName});
-                    outboundSecondChildItem.AddField(new DictionaryEntry {Key = "LastName", Value = currentBlogComment.User.LastName});
-
-                    outboundItemData.AddField(new DictionaryEntry {Key = "User", Value = outboundSecondChildItem.GetPayload()});
-
                     return outboundItemData.GetPayload();
                 }
                 else

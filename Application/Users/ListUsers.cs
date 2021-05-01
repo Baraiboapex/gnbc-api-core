@@ -24,7 +24,7 @@ namespace Application.Users
 
             public async Task<List<Hashtable>> Handle(GetUsers request, CancellationToken cancellationToken)
             {
-                var users = await _context.Users.ToListAsync();
+                var users = await _context.Users.Include(u => u.UserFavorite).ToListAsync();
                 var usersAttach = new List<Hashtable>();
 
                 if(users.Count > 0)

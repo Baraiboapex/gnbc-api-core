@@ -27,7 +27,7 @@ namespace Application.BlogPostCategories
                 var blogCategories = await _context.BlogPostCategories.ToListAsync();
                 var blogCategoriesAttach = new List<Hashtable>();
                 
-                if(blogCategories.Count < 0)
+                if(blogCategories.Count > 0)
                 {
                     foreach(var category in blogCategories)
                     {
@@ -35,7 +35,7 @@ namespace Application.BlogPostCategories
 
                         outboundItemData.AddField(new DictionaryEntry { Key = "BlogCategoryId", Value = category.Id });
                         outboundItemData.AddField(new DictionaryEntry { Key = "BlogPostCategoryName", Value = category.BlogPostCategoryName });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "BlogPosts", Value = category.BlogPosts });
+                        //outboundItemData.AddField(new DictionaryEntry { Key = "BlogPosts", Value = category.BlogPosts });
 
                         blogCategoriesAttach.Add(outboundItemData.GetPayload());
                     }

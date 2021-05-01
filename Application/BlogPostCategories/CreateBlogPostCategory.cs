@@ -28,7 +28,8 @@ namespace Application.BlogPostCategories
 
             public async Task<Unit> Handle(AddBlogPostCategory request, CancellationToken cancellationToken)
             {
-                bool categoryDoesNotExist = (await _context.BlogPostCategories.FindAsync(request.NewBlogPostCategory)) == null;
+                var currentCategory = await _context.BlogPostCategories.SingleOrDefaultAsync(bc => bc.BlogPostCategoryName == request.NewBlogPostCategory.BlogPostCategoryName);
+                bool categoryDoesNotExist = currentCategory == null;
 
                 if(categoryDoesNotExist)
                 {

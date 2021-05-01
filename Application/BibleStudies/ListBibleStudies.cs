@@ -8,7 +8,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-
 namespace Application.BibleStudies
 {
     public class ListBibleStudies
@@ -34,10 +33,10 @@ namespace Application.BibleStudies
                     {
                         var outboundItemData = new OutboundDTO();
 
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonId", Value = bibleStudy.Id });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonName", Value = bibleStudy.BibleStudyName });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonDescription", Value = bibleStudy.BibleStudyDescription });
-                        outboundItemData.AddField(new DictionaryEntry { Key = "SermonVideoLink", Value = bibleStudy.BibleStudyVideoLink });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "BibleStudyId", Value = bibleStudy.Id });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "BibleStudyName", Value = bibleStudy.BibleStudyName });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "BibleStudyDescription", Value = bibleStudy.BibleStudyDescription });
+                        outboundItemData.AddField(new DictionaryEntry { Key = "BibleStudyVideoLink", Value = bibleStudy.BibleStudyVideoLink });
 
                         bibleStudiesAttach.Add(outboundItemData.GetPayload());
                     }

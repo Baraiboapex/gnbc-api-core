@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Users
 {
@@ -26,20 +27,26 @@ namespace Application.Users
 
                 public async Task<Hashtable> Handle(GetFavoriteUserItems request, CancellationToken cancellationToken)
                 {
-                    var user = await _context.Users.FindAsync(request.UserId);
-                    var userFavorite = user.UserFavorite;
+                    var user = await _context.UserFavorites
+                    .Include(uf => uf.BlogPosts)
+                    .Include(uf => uf.ChurchEvents)
+                    .Include(uf => uf.BibleStudies)
+                    .Include(uf => uf.Sermons)
+                    .SingleOrDefaultAsync(u => u.UserId == request.UserId);
 
                     bool userDoesNotExist = user == null;
 
                     if(!userDoesNotExist)
                     {
-                        var favoriteBlogPosts = userFavorite.BlogPosts;
-                        var favoriteSermons = userFavorite.Sermons;
-                        var favoriteBibleStudies = userFavorite.BibleStudies;
+                        var favoriteBlogPosts = user.BlogPosts;
+                        var favoriteSermons = user.Sermons;
+                        var favoriteBibleStudies = user.BibleStudies;
+                        var markedChurchEvents = user.ChurchEvents;
 
                         var loadBibleStudies = new List<Hashtable>();
                         var loadSermons = new List<Hashtable>();
                         var loadBlogPosts = new List<Hashtable>();
+                        var loadChurchEvents = new List<Hashtable>();
 
                         var outboundParentItem = new OutboundDTO();
 
@@ -88,9 +95,25 @@ namespace Application.Users
                             }
                         }
 
+                        if(markedChurchEvents.Count > 0)
+                        {
+                            foreach(var churchEvent in markedChurchEvents)
+                            {
+                                var outboundItemData = new OutboundDTO();
+
+                                outboundItemData.AddField(new DictionaryEntry { Key = "ChurchEventId", Value = churchEvent.Id });
+                                outboundItemData.AddField(new DictionaryEntry { Key = "ChurchEventName", Value = churchEvent.ChurchEventName });
+                                outboundItemData.AddField(new DictionaryEntry { Key = "ChurchEventDescription", Value = churchEvent.ChurchEventDescription });
+                                outboundItemData.AddField(new DictionaryEntry { Key = "ChurchEventImage", Value = churchEvent.ChurchEventImage });
+
+                                loadChurchEvents.Add(outboundItemData.GetPayload());
+                            }
+                        }
+
                         outboundParentItem.AddField(new DictionaryEntry { Key = "FavoriteBibleStudies", Value = loadBibleStudies });
                         outboundParentItem.AddField(new DictionaryEntry { Key = "FavoriteSermons", Value = loadSermons });
-                        outboundParentItem.AddField(new DictionaryEntry { Key = "FavoriteBibleStudies", Value = loadBlogPosts });
+                        outboundParentItem.AddField(new DictionaryEntry { Key = "BlogPosts", Value = loadBlogPosts });
+                        outboundParentItem.AddField(new DictionaryEntry { Key = "ChurchEvents", Value = loadChurchEvents });
                         
                         return outboundParentItem.GetPayload();
                 }

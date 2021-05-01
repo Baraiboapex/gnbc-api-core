@@ -4,7 +4,9 @@ using System.Threading.Tasks;
 using Domain.InDTOs;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
+using Application.Helpers;
 
 namespace Application.BibleStudies
 {
@@ -26,7 +28,8 @@ namespace Application.BibleStudies
 
             public async Task<Unit> Handle(NewBibleStudy request, CancellationToken cancellationToken)
             {
-                bool bibleDoesNotExist = (await _context.BibleStudies.FindAsync(request.AddBibleStudy)) == null;
+                var currentBibleStudy = await _context.BibleStudies.SingleOrDefaultAsync(b => b.BibleStudyName == request.AddBibleStudy.BibleStudyName);
+                bool bibleDoesNotExist = currentBibleStudy == null;
 
                 if(bibleDoesNotExist)
                 {

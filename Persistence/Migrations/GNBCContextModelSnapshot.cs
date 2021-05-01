@@ -64,6 +64,21 @@ namespace Persistence.Migrations
                     b.ToTable("BlogPostUserFavorite");
                 });
 
+            modelBuilder.Entity("ChurchEventUserFavorite", b =>
+                {
+                    b.Property<Guid>("ChurchEventsId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserFavoritesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ChurchEventsId", "UserFavoritesId");
+
+                    b.HasIndex("UserFavoritesId");
+
+                    b.ToTable("ChurchEventUserFavorite");
+                });
+
             modelBuilder.Entity("Domain.BibleStudy", b =>
                 {
                     b.Property<Guid>("Id")
@@ -76,8 +91,14 @@ namespace Persistence.Migrations
                     b.Property<string>("BibleStudyName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("BibleStudyShares")
+                        .HasColumnType("int");
+
                     b.Property<string>("BibleStudyVideoLink")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BibleStudyViews")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
@@ -134,9 +155,15 @@ namespace Persistence.Migrations
                     b.Property<string>("BlogPostImage")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("BlogPostShares")
+                        .HasColumnType("int");
+
                     b.Property<string>("BlogPostTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BlogPostViews")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
                         .HasColumnType("datetime2");
@@ -228,12 +255,43 @@ namespace Persistence.Migrations
                     b.Property<string>("SermonName")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("SermonSeriesId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SermonShares")
+                        .HasColumnType("int");
+
                     b.Property<string>("SermonVideoLink")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SermonViews")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SermonSeriesId");
+
+                    b.ToTable("Sermons");
+                });
+
+            modelBuilder.Entity("Domain.SermonSeries", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SeriesName")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sermons");
+                    b.ToTable("SermonSeries");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -243,6 +301,9 @@ namespace Persistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("CanBlog")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("CanRecieveNotifications")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("DateCreated")
@@ -257,6 +318,9 @@ namespace Persistence.Migrations
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
@@ -280,6 +344,9 @@ namespace Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("BlogPostCount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ChurchEventsCount")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DateCreated")
@@ -363,6 +430,21 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ChurchEventUserFavorite", b =>
+                {
+                    b.HasOne("Domain.ChurchEvent", null)
+                        .WithMany()
+                        .HasForeignKey("ChurchEventsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.UserFavorite", null)
+                        .WithMany()
+                        .HasForeignKey("UserFavoritesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Domain.BlogComment", b =>
                 {
                     b.HasOne("Domain.BlogPost", "BlogPost")
@@ -370,7 +452,7 @@ namespace Persistence.Migrations
                         .HasForeignKey("BlogPostId");
 
                     b.HasOne("Domain.User", "User")
-                        .WithMany()
+                        .WithMany("BlogComments")
                         .HasForeignKey("UserId");
 
                     b.Navigation("BlogPost");
@@ -385,6 +467,15 @@ namespace Persistence.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Sermon", b =>
+                {
+                    b.HasOne("Domain.SermonSeries", "SermonSeries")
+                        .WithMany("Sermons")
+                        .HasForeignKey("SermonSeriesId");
+
+                    b.Navigation("SermonSeries");
                 });
 
             modelBuilder.Entity("Domain.UserFavorite", b =>
@@ -416,8 +507,15 @@ namespace Persistence.Migrations
                     b.Navigation("BlogPostComments");
                 });
 
+            modelBuilder.Entity("Domain.SermonSeries", b =>
+                {
+                    b.Navigation("Sermons");
+                });
+
             modelBuilder.Entity("Domain.User", b =>
                 {
+                    b.Navigation("BlogComments");
+
                     b.Navigation("BlogPosts");
 
                     b.Navigation("UserFavorite");

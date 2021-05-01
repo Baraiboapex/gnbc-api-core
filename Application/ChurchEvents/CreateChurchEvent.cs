@@ -28,10 +28,10 @@ namespace Application.ChurchEvents
 
             public async Task<Unit> Handle(AddChurchEvent request, CancellationToken cancellationToken)
             {
-                var currentChurchEvent = await _context.ChurchEvents.FindAsync(request.NewChurchEvent.ChurchEventName);
-                bool churchEventExists = currentChurchEvent != null;
+                var currentChurchEvent = await _context.ChurchEvents.SingleOrDefaultAsync(ce => ce.ChurchEventName == request.NewChurchEvent.ChurchEventName);
+                bool churchEventDoesNotExist = currentChurchEvent == null;
 
-                if(churchEventExists)
+                if(churchEventDoesNotExist)
                 {
                     var churchEvent = new ChurchEvent();
 

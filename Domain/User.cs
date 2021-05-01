@@ -1,10 +1,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
-using System;
+using Microsoft.AspNetCore.Identity;
 
 namespace Domain
 {
-    public class User : BaseEntity
+    public class User : BaseEntity 
     {
         public string FirstName {get; set;}
         public string LastName {get; set;}
@@ -16,6 +16,7 @@ namespace Domain
         public bool CanBlog {get; set;} = false;
         public bool CanRecieveNotifications {get; set;} = false;
         public virtual ICollection<BlogPost> BlogPosts {get; set;}
+        public virtual ICollection<BlogComment> BlogComments {get; set;}
         public virtual UserFavorite UserFavorite {get; set;}
     }
 }
