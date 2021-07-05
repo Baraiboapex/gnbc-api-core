@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
+
 namespace Persistence.Migrations
 {
     [DbContext(typeof(GNBCContext))]
